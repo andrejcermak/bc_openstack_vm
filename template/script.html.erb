@@ -1,0 +1,20 @@
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const projectSelect = document.querySelector('select[name="batch_connect_session_context[project_id]"]');
+    const dynamicOptions = document.getElementById('batch_connect_session_context_dynamic_attribute');
+    console.log("test")
+    projectSelect.addEventListener('change', function() {
+      const selectedProject = projectSelect.value;
+      console.log('Selected project:', selectedProject);
+      // Clear previous dynamic options
+      dynamicOptions.innerHTML = '';
+
+      // Add new dynamic options based on the selected project
+      if (selectedProject === 'meta-cloud-test') {
+        dynamicOptions.innerHTML = '<option value="attribute1">Attribute 1</option>';
+      } else if (selectedProject === 'project2') {
+        dynamicOptions.innerHTML = '<option value="attribute2">Attribute 2</option>';
+      }
+    });
+  });
+</script>

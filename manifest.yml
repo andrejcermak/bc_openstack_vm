@@ -1,0 +1,7 @@
+---
+name: Simple OS virtual machine 
+category: Interactive Apps 
+subcategory: Cloud 
+role: batch_connect
+description: This is a simple VM deployed to OpenStack
+icon: logo.png

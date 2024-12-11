@@ -1,0 +1,29 @@
+<%
+require 'json'
+user = OodSupport::User.new
+projects_file = File.read("/home/#{user}/projects.json")
+
+projects = JSON.parse(projects_file)
+%>
+---
+cluster:
+  - "40-coder-xcermak5"
+workspace_name: "workspace"
+form:
+ - project_id
+ - ssh_public_key
+attributes:
+  project_id:
+    widget: "select"
+    label: "Select project"
+    help: |
+      Your help message
+    options:
+    <%- projects.each do |project| %>
+    - ["<%= project['name'] %>", "<%= project['id'] %>"]
+    <%- end %>
+  ssh_public_key:
+    widget: "text_field"
+    label: "ssh public key"
+    help: |
+      Insert your public key to enable ssh
