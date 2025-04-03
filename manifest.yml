@@ -1,5 +1,5 @@
 ---
-name: Simple OS virtual machine 
+name: OpenStack VM 
 category: Interactive Apps 
 subcategory: Cloud 
 role: batch_connect
