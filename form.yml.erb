@@ -1,13 +1,34 @@
 <%
 require 'json'
-user = OodSupport::User.new
-projects_file = File.read("/home/#{user}/projects.json")
 
-projects = JSON.parse(projects_file)
+Dir.glob('/var/lib/gems/3.1.0/gems/*').each do |dir|
+  if File.directory?(dir) && dir.end_with?('-lib') == false
+    $LOAD_PATH.unshift("#{dir}/lib")
+  end
+end
+
+
+require "fog/openstack"
+
+user = OodSupport::User.new
+
+token_json = JSON.parse(File.read("/home/#{user}/token.json"))
+access_token = token_json["id"]
+user_id = token_json["user_id"]
+auth_url = "https://identity.brno.openstack.cloud.e-infra.cz/v3"
+
+connection = Fog::OpenStack::Identity.new({
+   openstack_auth_url: auth_url,
+   openstack_management_url: auth_url,
+   openstack_auth_token: access_token,
+})
+
+projects = connection.list_user_projects(user_id).body["projects"]
+
 %>
 ---
 cluster:
-  - "40-coder-xcermak5"
+  - "43-coder-ood"
 workspace_name: "workspace"
 form:
  - project_id
