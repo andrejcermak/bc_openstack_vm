@@ -1,0 +1,17 @@
+<%
+error_logs =  info.ood_connection_info.dig(:error_logs)
+host = info.ood_connection_info.dig(:host)
+%>
+<% if error_logs%>
+  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample<%=info.id%>" aria-expanded="false" aria-controls="collapseExample">
+    Show error logs
+  </button>
+<div class="collapse" id="collapseExample<%=info.id%>">
+  <div class="card card-body"><%= error_logs %> </div>
+</div>
+
+
+<% end %>
+<% if host %>
+<div> Use <code>ssh ubuntu@<%=host %></code> to connect to your VM</div>
+<% end %>

@@ -11,21 +11,64 @@ end
 require "fog/openstack"
 
 user = OodSupport::User.new
+OPENSTACK_INSTANCE = "brno.openstack.cloud.e-infra.cz"
+unless File.exists?("/home/#{user}/token.json")
+        return
+end
 
 token_json = JSON.parse(File.read("/home/#{user}/token.json"))
 access_token = token_json["id"]
 user_id = token_json["user_id"]
-auth_url = "https://identity.brno.openstack.cloud.e-infra.cz/v3"
+auth_url = "https://identity.#{OPENSTACK_INSTANCE}/v3"
 
-connection = Fog::OpenStack::Identity.new({
+connection_params = {
    openstack_auth_url: auth_url,
    openstack_management_url: auth_url,
    openstack_auth_token: access_token,
-})
+}
+identity = Fog::OpenStack::Identity.new(connection_params)
 
-projects = connection.list_user_projects(user_id).body["projects"]
+projects = identity.list_user_projects(user_id).body["projects"]
+
+flavors = []
+projects.each do |project|
+ auth = {
+    "auth": {
+        "identity": {
+            "methods": [
+                "token"
+            ],
+            "token": {
+                "id": access_token
+            }
+        },
+        "scope": {
+            "project": {
+                "id": project['id']
+            }
+        }
+    }
+  }
+  scoped_token = identity.tokens.authenticate(auth)
+
+  connection_params = {
+    openstack_auth_url: auth_url,
+    openstack_project_name: project['name'],
+    openstack_management_url: "https://compute.#{OPENSTACK_INSTANCE}/v2.1/#{project['id']}",
+    openstack_auth_token: scoped_token,
+  }
+  compute = Fog::OpenStack::Compute.new(connection_params)
+  compute.flavors.each do |flavor|
+    flavors << [
+      "#{flavor.name} - #{flavor.vcpus}VCPUS, #{flavor.ram/1024}GB RAM, #{flavor.disk}GB disk", 
+      flavor.name,
+      project['id']
+    ]
+  end
+end
 
 %>
+
 ---
 cluster:
   - "43-coder-ood"
@@ -33,16 +76,31 @@ workspace_name: "workspace"
 form:
  - project_id
  - ssh_public_key
+ - flavor
 attributes:
   project_id:
     widget: "select"
-    label: "Select project"
+    label: "OpenStack project"
+    display: true
+    required: true
     help: |
-      Your help message
+      Select your OS project. If the dropdown is empty and you already have a project in OpenStack, login to <a href="https://horizon.<%=OPENSTACK_INSTANCE%>/">Horizon</a>  and then refresh this page. If that does not help there might be some issue with OpenStack. In that case please contact <a href=mailto:"cloud@metacentrum.cz">support</a>.
     options:
     <%- projects.each do |project| %>
     - ["<%= project['name'] %>", "<%= project['id'] %>"]
     <%- end %>
+  flavor:
+    widget: "select"
+    label: "Node flavor"
+    display: true
+    help: |
+      Select your node flavor
+    options:
+    <%- flavors.each do |flavor| %>
+    - ["<%= flavor[0] %>", "<%= flavor[1] %>",
+    data-exclusive-option-for-project-id-<%= flavor[2]%>: true]
+   <%- end %>
+
   ssh_public_key:
     widget: "text_field"
     label: "ssh public key"
