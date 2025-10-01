@@ -2,8 +2,10 @@
 script:
   native:
     workspace_name: "os-vm"
-    template_id: "$TEMPLATE_ID"
-    org_id: "$ORGANIZATION_ID"
+    template_version_id: "c00863c7-0fac-4976-9ef0-b8d5aa48c26d" 
+    org_id: "e6cc4dfc-227d-48b0-b09e-6ec3eec7d490"
     project_id: <%=project_id %>
     coder_parameters:
       pubkey: <%= ssh_public_key%>
+      flavor: <%= flavor %>
+
