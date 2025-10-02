@@ -3,5 +3,5 @@ name: OpenStack VM
 category: Interactive Apps 
 subcategory: Cloud 
 role: batch_connect
-description: This is a simple VM deployed to OpenStack
+description: This is a simple Ubuntu VM deployed to OpenStack accessible via SSH. <a href="https://docs.platforms.cloud.e-infra.cz/en/docs/">Learn more.</a> 
 icon: logo.png
