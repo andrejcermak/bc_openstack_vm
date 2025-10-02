@@ -1,5 +1,5 @@
 ---
-name: OpenStack VM 
+name: OpenStack VM (beta)
 category: Interactive Apps 
 subcategory: Cloud 
 role: batch_connect
