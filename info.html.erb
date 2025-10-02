@@ -1,6 +1,7 @@
 <%
-error_logs =  info.ood_connection_info.dig(:error_logs)
-host = info.ood_connection_info.dig(:host)
+connection_info = info.respond_to?(:ood_connection_info) ? info.ood_connection_info : nil
+error_logs =connection_info&.dig(:error_logs)
+host = connection_info&.dig(:host)
 %>
 <% if error_logs%>
   <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample<%=info.id%>" aria-expanded="false" aria-controls="collapseExample">
