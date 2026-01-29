@@ -3,7 +3,7 @@ connection_info = info.respond_to?(:ood_connection_info) ? info.ood_connection_i
 error_logs =connection_info&.dig(:error_logs)
 host = connection_info&.dig(:host)
 %>
-<% if error_logs%>
+<%unless error_logs.empty?%>
   <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample<%=info.id%>" aria-expanded="false" aria-controls="collapseExample">
     Show error logs
   </button>
