@@ -66,8 +66,8 @@ projects.each do |project|
       project['id']
     ]
   end
-  flavors
 end
+flavors = flavors.sort
 %>
 
 ---
@@ -98,7 +98,7 @@ attributes:
     help: |
       Select your node flavor
     options:
-    <%- flavors.sort.each do |flavor| %>
+    <%- flavors.each do |flavor| %>
     - ["<%= flavor[0] %>", "<%= flavor[1] %>",
     data-exclusive-option-for-project-id-<%= flavor[2]%>: true]
    <%- end %>
