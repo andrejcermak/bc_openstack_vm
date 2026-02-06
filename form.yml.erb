@@ -11,7 +11,7 @@ end
 require "fog/openstack"
 
 user = OodSupport::User.new
-OPENSTACK_INSTANCE = "brno.openstack.cloud.e-infra.cz"
+openstack_instance = "brno.openstack.cloud.e-infra.cz"
 token_file = "/tmp/#{user}-os-token.json"
 unless File.exists?(token_file)
         return
@@ -20,7 +20,7 @@ end
 token_json = JSON.parse(File.read(token_file))
 access_token = token_json["id"]
 user_id = token_json["user_id"]
-auth_url = "https://identity.#{OPENSTACK_INSTANCE}/v3"
+auth_url = "https://identity.#{openstack_instance}/v3"
 
 connection_params = {
    openstack_auth_url: auth_url,
@@ -55,7 +55,7 @@ projects.each do |project|
   connection_params = {
     openstack_auth_url: auth_url,
     openstack_project_name: project['name'],
-    openstack_management_url: "https://compute.#{OPENSTACK_INSTANCE}/v2.1/#{project['id']}",
+    openstack_management_url: "https://compute.#{openstack_instance}/v2.1/#{project['id']}",
     openstack_auth_token: scoped_token,
   }
   compute = Fog::OpenStack::Compute.new(connection_params)
@@ -85,7 +85,7 @@ attributes:
     display: true
     required: true
     help: |
-      Select your OS project. If the dropdown is empty and you already have a project in OpenStack, login to <a href="https://horizon.<%=OPENSTACK_INSTANCE%>/">Horizon</a>  and then refresh this page. If that does not help there might be some issue with OpenStack. In that case please contact <a href=mailto:"cloud@metacentrum.cz">support</a>.
+      Select your OS project. If the dropdown is empty and you already have a project in OpenStack, login to <a href="https://horizon.<%=openstack_instance%>/">Horizon</a>  and then refresh this page. If that does not help there might be some issue with OpenStack. In that case please contact <a href=mailto:"cloud@metacentrum.cz">support</a>.
     options:
     <%- projects.each do |project| %>
     - ["<%= project['name'] %>", "<%= project['id'] %>"]
