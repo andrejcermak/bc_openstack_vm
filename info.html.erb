@@ -1,6 +1,6 @@
 <%
 connection_info = info.respond_to?(:ood_connection_info) ? info.ood_connection_info : nil
-error_logs =connection_info&.dig(:error_logs)
+error_logs = connection_info&.fetch("error_logs", [])
 host = connection_info&.dig(:host)
 %>
 <%unless error_logs.empty?%>
