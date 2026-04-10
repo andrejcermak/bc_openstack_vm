@@ -1,26 +1,12 @@
 <%
-require 'json'
-require "ood_core/openstack"
+require "ood_support/openstack"
 
 user = OodSupport::User.new
+openstack_instance = "brno.openstack.cloud.e-infra.cz"
 token_file = "/tmp/#{user}-os-token.json"
 
-openstack_instance = "brno.openstack.cloud.e-infra.cz"
-auth_url = "https://identity.#{openstack_instance}/v3"
-
-# Load OpenStack credentials
-token_data = OodSupport::OpenStack::Credentials.load_token(token_file)
-unless token_data
-  return
-end
-
-access_token = OodSupport::OpenStack::Credentials.access_token(token_data)
-user_id = OodSupport::OpenStack::Credentials.user_id(token_data)
-
-# Create helper and fetch projects and flavors
-helper = OodSupport::OpenStack::Helper.new(auth_url: auth_url, openstack_instance: openstack_instance)
-projects = helper.fetch_user_projects(user_id, access_token)
-flavors = helper.fetch_all_flavors(user_id, access_token, projects)
+helper = OodSupport::OpenStack::Helper.new(token_file: token_file, openstack_instance: openstack_instance)
+projects, flavors = helper.load_projects_and_flavors
 %>
 
 ---
