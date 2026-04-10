@@ -5,7 +5,7 @@ user = OodSupport::User.new
 openstack_instance = "brno.openstack.cloud.e-infra.cz"
 token_file = "/tmp/#{user}-os-token.json"
 
-helper = OodSupport::OpenStack::Helper.new(token_file: token_file, openstack_instance: openstack_instance)
+helper = OodSupport::OpenStackHelper.new(token_file: token_file, openstack_instance: openstack_instance)
 projects, flavors = helper.load_projects_and_flavors
 %>
 
