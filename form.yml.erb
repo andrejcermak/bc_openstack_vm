@@ -1,9 +1,14 @@
 <%
 require "ood_core"
-
 user = OodSupport::User.new
+
+# configuration
 openstack_instance = "brno.openstack.cloud.e-infra.cz"
 token_file = "/tmp/#{user}-os-token.json"
+cluster_name = "coder"
+coder_template_version_id = "764b3d3d-1a8f-4257-a046-a11efffa8cb6"
+coder_org_id = "e6cc4dfc-227d-48b0-b09e-6ec3eec7d490"
+
 
 helper = OodCore::OpenStackHelper.new(token_file: token_file, openstack_instance: openstack_instance)
 projects, flavors = helper.load_projects_and_flavors
@@ -11,7 +16,7 @@ projects, flavors = helper.load_projects_and_flavors
 
 ---
 cluster:
-  - "coder"
+  - <%= cluster_name %>
 workspace_name: "workspace"
 form:
  - project_id
