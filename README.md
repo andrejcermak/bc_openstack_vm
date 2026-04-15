@@ -6,6 +6,23 @@ Deploy an interactive Ubuntu virtual machine on OpenStack cloud infrastructure v
 
 This Open OnDemand Batch Connect app launches Ubuntu VMs on OpenStack cloud infrastructure. Users can select their project, choose a node flavor, and provide an SSH public key for secure access to the deployed VM.
 
+## How it looks
+
+### Launch form
+
+| Project and flavor  selection, public key definition | 
+|------------------------------------------------------|
+| ![Form](docs/form.png)                          |
+### Progress after job submission
+
+| |
+|---|
+| ![Progress left](docs/starting.png) | 
+
+| |
+|---|
+![Progress right](docs/running.png) |
+
 ## Features
 
 - **Dynamic Project Selection**: Automatically loads available OpenStack projects from the configured cloud instance
