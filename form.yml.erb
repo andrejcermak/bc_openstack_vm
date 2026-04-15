@@ -22,7 +22,11 @@ form:
   - project_id
   - flavor
   - ssh_public_key
+  - template_version_id
+  - org_id
 attributes:
+  template_version_id: <%= coder_template_version_id %>
+  org_id: <%= coder_org_id %>
   project_id:
     widget: "select"
     label: "OpenStack project"
