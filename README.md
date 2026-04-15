@@ -54,19 +54,43 @@ cd /etc/ood/config/apps
 git clone <repository-url> bc_openstack_vm
 ```
 
+## 2. Configure for your site
+
+Edit `form.ymle.rb` and update these values for your cluster:
+
+| Attribute | Default | Change to |
+|-----------|---------|-----------|
+| `openstack_instance` | `"brno.openstack.cloud.e-infra.cz"` | Your OpenStack instance |
+| `token_file` | `"/tmp/#{user}-os-token.json"` | Path for OAuth token |
+| `cluster_name` | `"coder"` | Default partition/queue |
+| `coder_template_version_id` | `"NaN"` | Coder workspace template version ID |
+| `coder_org_id` | `"NaN"` | Coder organization ID |
+
+### 3. Verify
+
+No OOD restart is needed (Batch Connect apps are detected automatically). Visit your OOD dashboard and look for **[App Name]** under **Interactive Apps > [Category]**.
+
+
 ## Configuration
 
-### Site-Specific Configuration
+### form.yml.erb attributes
 
-Edit [`form.yml.erb`](form.yml.erb) and [`submit.yml.erb`](submit.yml.erb) to customize the following values:
+The form defines both static and dynamic attributes that are populated at runtime:
 
-| Parameter | Location | Description | Default |
-|-----------|----------|-------------|---------|
-| `openstack_instance` | [`form.yml.erb:6`](form.yml.erb#L6) | OpenStack Horizon/API endpoint | `brno.openstack.cloud.e-infra.cz` |
-| `token_file` | [`form.yml.erb:7`](form.yml.erb#L7) | Path for OAuth token cache | `/tmp/#{user}-os-token.json` |
-| `cluster_name` | [`form.yml.erb:8`](form.yml.erb#L8) | Target Coder cluster name | `coder` |
-| `coder_template_version_id` | [`form.yml.erb:9`](form.yml.erb#L9) | Coder workspace template version ID | `NaN` |
-| `coder_org_id` | [`form.yml.erb:10`](form.yml.erb#L10) | Coder organization ID | `NaN` |
+#### Dynamic Attributes
+
+| Attribute | Widget | Source | Description |
+|-----------|--------|--------|-------------|
+| `project_id` | `select` | OpenStack API | Populated from available OpenStack projects. Users select the project where their VM will be deployed. Options are loaded dynamically via `OodCore::OpenStackHelper#load_projects_and_flavors`. |
+| `flavor` | `select` | OpenStack API | Populated from available VM flavors. Each flavor is tied to specific projects using exclusive options (via `data-exclusive-option-for-project-id-*` attributes). Flavor availability depends on the selected project. |
+| `ssh_public_key` | `text_area` | User input | Required field where users paste their SSH public key(s). Multiple keys can be provided, one per line. The key is deployed to the VM for SSH access. |
+
+#### Static Attributes
+
+| Attribute | Value | Description |
+|-----------|-------|-------------|
+| `template_version_id` | Configured in [`form.yml.erb`](form.yml.erb#L9) | Coder workspace template version ID used for VM provisioning. |
+| `org_id` | Configured in [`form.yml.erb`](form.yml.erb#L10) | Coder organization ID for workspace organization. |
 
 ### Customizing the OpenStack Instance
 
