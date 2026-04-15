@@ -23,6 +23,12 @@ This Open OnDemand Batch Connect app launches Ubuntu VMs on OpenStack cloud infr
 |---|
 ![Progress right](docs/running.png) |
 
+## Supporting Materials
+
+### Conference Materials
+- <a href="https://pretalx.com/good-2026/talk/ATV33X/" target="_blank" rel="noopener noreferrer">GOOD26 Conference Talk Abstract</a>
+- <a href="https://vimeo.com/showcase/12164326?video=1174783975" target="_blank" rel="noopener noreferrer">GOOD26 Conference Talk</a>
+
 ## Features
 
 - **Dynamic Project Selection**: Automatically loads available OpenStack projects from the configured cloud instance
