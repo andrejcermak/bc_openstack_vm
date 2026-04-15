@@ -19,36 +19,37 @@ cluster:
   - <%= cluster_name %>
 workspace_name: "workspace"
 form:
- - project_id
- - ssh_public_key
- - flavor
+  - project_id
+  - flavor
+  - ssh_public_key
 attributes:
   project_id:
     widget: "select"
     label: "OpenStack project"
-    display: true
     required: true
     help: |
-      Select your OS project. If the dropdown is empty and you already have a project in OpenStack, login to <a href="https://horizon.<%=openstack_instance%>/">Horizon</a>  and then refresh this page. If that does not help there might be some issue with OpenStack. In that case please contact <a href=mailto:"cloud@metacentrum.cz">support</a>.
+      Select your OpenStack project. If the dropdown is empty and you already have a project in OpenStack, login to <a href="https://horizon.<%= openstack_instance %>/">Horizon</a> and then refresh this page. If that does not help, there might be an issue with OpenStack. In that case, please contact <a href="mailto:cloud@metacentrum.cz">support</a>.
     options:
-    <%- projects.each do |project| %>
-    - ["<%= project['name'] %>", "<%= project['id'] %>"]
-    <%- end %>
+      <%- projects.each do |project| %>
+      - ["<%= project['name'] %>", "<%= project['id'] %>"]
+      <%- end %>
+
   flavor:
     widget: "select"
     label: "Node flavor"
     required: true
-    display: true
     help: |
-      Select your node flavor
+      Select the VM flavor (compute resources) for your instance. Available options depend on your selected project.
     options:
-    <%- flavors.each do |flavor| %>
-    - ["<%= flavor[0] %>", "<%= flavor[1] %>", data-exclusive-option-for-project-id-<%= flavor[2] %>: true]
-   <%- end %>
+      <%- flavors.each do |flavor| %>
+      - ["<%= flavor[0] %>", "<%= flavor[1] %>", data-exclusive-option-for-project-id-<%= flavor[2] %>: true]
+      <%- end %>
 
   ssh_public_key:
-    widget: "text_field"
-    label: "ssh public key"
+    widget: "text_area"
+    label: "SSH public key"
     required: true
     help: |
-      Insert your public key to enable ssh
+      Paste your SSH public key (typically from ~/.ssh/id_rsa.pub or ~/.ssh/id_ed25519.pub).
+      The key will be deployed to authorize SSH access to your VM.
+      Multiple keys can be provided, one per line.
